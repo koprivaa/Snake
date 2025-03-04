@@ -76,13 +76,11 @@ namespace Snake
                         buttonWasPressed = "yes";
                     }
                 }
-                xposBody.Add(head.xpos);
-                yposBody.Add(head.ypos);
+                AddNewBodyParts(head, [xposBody, yposBody]); //Přesunuté do vlastní metody -Turecký
                 DetermineMovementDirection(movement, head); //Switch statement přesunutý do vlastní metody -Turecký
                 if (xposBody.Count() > score)
                 {
-                    xposBody.RemoveAt(0);
-                    yposBody.RemoveAt(0);
+                    RemoveOldBodyParts([xposBody, yposBody]); //Přesunuté do vlastní metody -Turecký
                 }
             }
 
@@ -178,6 +176,17 @@ namespace Snake
                 new_movement = "RIGHT";
             }
             return new_movement;
+        }
+
+        static void AddNewBodyParts(Pixel head, List<List<int>> body)
+        {
+            body[0].Add(head.xpos);
+            body[1].Add(head.ypos);
+        }
+        static void RemoveOldBodyParts(List<List<int>> body)
+        {
+            body[0].RemoveAt(0);
+            body[1].RemoveAt(0);
         }
     }
 }
