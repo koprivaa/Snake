@@ -29,7 +29,7 @@ namespace Snake
             int xposBerry = randomNumber.Next(0, screenWidth);
             int yposBerry = randomNumber.Next(0, screenHeight);
             DateTime dateBeforePress = DateTime.Now;
-            DateTime dateDuringPress = DateTime.Now;
+            //DateTime dateDuringPress = DateTime.Now;
             string buttonWasPressed = "no";
             while (true)
             {
@@ -37,6 +37,27 @@ namespace Snake
                 //Rozdělení na metody vykreslení hranic a kolizí -Kopřiva
                 CheckCollision();
                 DrawBorders();
+
+                if (head.xpos == screenWidth - 1 || head.xpos == 0 || head.ypos == screenHeight - 1 || head.ypos == 0)
+                {
+                    isGameover = 1;
+                }
+                for (int i = 0; i < screenWidth; i++)
+                {
+                    Console.SetCursorPosition(i, 0);
+                    Console.Write("■");
+                    Console.SetCursorPosition(i, screenHeight - 1);
+                    Console.Write("■");
+
+                }
+                for (int i = 0; i < screenHeight; i++)
+                {
+                    Console.SetCursorPosition(0, i);
+                    Console.Write("■");
+                    Console.SetCursorPosition(screenWidth - 1, i);
+                    Console.Write("■");
+                }
+
                 Console.ForegroundColor = ConsoleColor.Green;
                 if (xposBerry == head.xpos && yposBerry == head.ypos)
                 {
@@ -67,12 +88,10 @@ namespace Snake
                 buttonWasPressed = "no";
                 while (true)
                 {
-                    dateDuringPress = DateTime.Now;
-                    if (dateDuringPress.Subtract(dateBeforePress).TotalMilliseconds > 500) { break; }
+                    if (!has500msPassed(dateBeforePress)) { break; } //Přesunut výpočet, že 500 milisekund uběhlo do vlastní metody. -Turecký
                     if (Console.KeyAvailable)
                     {
                         ConsoleKeyInfo pressedButton = Console.ReadKey(true);
-                        //Console.WriteLine(toets.Key.ToString());
                         if (pressedButton.Key.Equals(ConsoleKey.UpArrow) && movement != "DOWN" && buttonWasPressed == "no")
                         {
                             movement = "UP";
@@ -167,6 +186,12 @@ namespace Snake
                     head.xpos++;
                     break;
             }
+        }
+        static bool has500msPassed(DateTime dateBeforePress)
+        {
+            DateTime dateDuringPress = DateTime.Now;
+            if (dateDuringPress.Subtract(dateBeforePress).TotalMilliseconds > 500) { return false; }
+            return true;
         }
     }
 }
