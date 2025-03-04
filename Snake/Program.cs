@@ -26,8 +26,10 @@ namespace Snake
             string movement = "RIGHT";
             List<int> xposBody = new List<int>();
             List<int> yposBody = new List<int>();
-            int xposBerry = randomNumber.Next(0, screenWidth);
-            int yposBerry = randomNumber.Next(0, screenHeight);
+            Pixel berry = new Pixel(); //Berry předělané z jednotlivých int proměnných na instanci třídy Pixel, stejně jako head. -Turecký
+            berry.xpos = randomNumber.Next(0, screenWidth);
+            berry.ypos = randomNumber.Next(0, screenHeight);
+            berry.color = ConsoleColor.Cyan;
             DateTime dateBeforePress = DateTime.Now;
             //DateTime dateDuringPress = DateTime.Now;
             string buttonWasPressed = "no";
@@ -105,7 +107,7 @@ namespace Snake
 
             void CheckBerryCollision()
             {
-                if (xposBerry == head.xpos && yposBerry == head.ypos)
+                if (berry.xpos == head.xpos && berry.ypos == head.ypos)
                 {
                     IncreaseScore();
                     RespawnBerry();
@@ -118,8 +120,8 @@ namespace Snake
 
             void RespawnBerry()
             {
-                xposBerry = randomNumber.Next(1, screenWidth - 2);
-                yposBerry = randomNumber.Next(1, screenHeight - 2);
+                berry.xpos = randomNumber.Next(1, screenWidth - 2);
+                berry.ypos = randomNumber.Next(1, screenHeight - 2);
             }
             void CheckBodyCollision()
             {
@@ -154,8 +156,8 @@ namespace Snake
 
             void UpdateBerryPosition()
             {
-                Console.SetCursorPosition(xposBerry, yposBerry);
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.SetCursorPosition(berry.xpos, berry.ypos);
+                Console.ForegroundColor = berry.color;
                 Console.Write("■");
             }
 
