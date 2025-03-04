@@ -38,25 +38,6 @@ namespace Snake
                 CheckCollision();
                 DrawBorders();
 
-                if (head.xpos == screenWidth - 1 || head.xpos == 0 || head.ypos == screenHeight - 1 || head.ypos == 0)
-                {
-                    isGameover = 1;
-                }
-                for (int i = 0; i < screenWidth; i++)
-                {
-                    Console.SetCursorPosition(i, 0);
-                    Console.Write("■");
-                    Console.SetCursorPosition(i, screenHeight - 1);
-                    Console.Write("■");
-
-                }
-                for (int i = 0; i < screenHeight; i++)
-                {
-                    Console.SetCursorPosition(0, i);
-                    Console.Write("■");
-                    Console.SetCursorPosition(screenWidth - 1, i);
-                    Console.Write("■");
-                }
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 if (xposBerry == head.xpos && yposBerry == head.ypos)
