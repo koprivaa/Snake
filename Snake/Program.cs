@@ -89,29 +89,10 @@ namespace Snake
                 while (true)
                 {
                     if (!has500msPassed(dateBeforePress)) { break; } //Přesunut výpočet, že 500 milisekund uběhlo do vlastní metody. -Turecký
-                    if (Console.KeyAvailable)
+                    if (Console.KeyAvailable && buttonWasPressed == "no")
                     {
-                        ConsoleKeyInfo pressedButton = Console.ReadKey(true);
-                        if (pressedButton.Key.Equals(ConsoleKey.UpArrow) && movement != "DOWN" && buttonWasPressed == "no")
-                        {
-                            movement = "UP";
-                            buttonWasPressed = "yes";
-                        }
-                        if (pressedButton.Key.Equals(ConsoleKey.DownArrow) && movement != "UP" && buttonWasPressed == "no")
-                        {
-                            movement = "DOWN";
-                            buttonWasPressed = "yes";
-                        }
-                        if (pressedButton.Key.Equals(ConsoleKey.LeftArrow) && movement != "RIGHT" && buttonWasPressed == "no")
-                        {
-                            movement = "LEFT";
-                            buttonWasPressed = "yes";
-                        }
-                        if (pressedButton.Key.Equals(ConsoleKey.RightArrow) && movement != "LEFT" && buttonWasPressed == "no")
-                        {
-                            movement = "RIGHT";
-                            buttonWasPressed = "yes";
-                        }
+                        movement = DeterminePressedButton(movement); //Přesunuté určení směru podle zmáčknutého tlačítka do vlastní metody. -Turecký
+                        buttonWasPressed = "yes";
                     }
                 }
                 xposBody.Add(head.xpos);
@@ -192,6 +173,27 @@ namespace Snake
             DateTime dateDuringPress = DateTime.Now;
             if (dateDuringPress.Subtract(dateBeforePress).TotalMilliseconds > 500) { return false; }
             return true;
+        }
+        static string DeterminePressedButton(string movement)
+        {
+            ConsoleKeyInfo pressedButton = Console.ReadKey(true);
+            if (pressedButton.Key.Equals(ConsoleKey.UpArrow) && movement != "DOWN")
+            {
+                return "UP";
+            }
+            if (pressedButton.Key.Equals(ConsoleKey.DownArrow) && movement != "UP")
+            {
+                return "DOWN";
+            }
+            if (pressedButton.Key.Equals(ConsoleKey.LeftArrow) && movement != "RIGHT")
+            {
+                return "LEFT";
+            }
+            if (pressedButton.Key.Equals(ConsoleKey.RightArrow) && movement != "LEFT")
+            {
+                return "RIGHT";
+            }
+            return movement;
         }
     }
 }
