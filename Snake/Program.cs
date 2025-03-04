@@ -194,23 +194,24 @@ namespace Snake
         static string DeterminePressedButton(string movement)
         {
             ConsoleKeyInfo pressedButton = Console.ReadKey(true);
+            string new_movement = movement;
             if (pressedButton.Key.Equals(ConsoleKey.UpArrow) && movement != "DOWN")
             {
-                return "UP";
+                new_movement = "UP";
             }
             if (pressedButton.Key.Equals(ConsoleKey.DownArrow) && movement != "UP")
             {
-                return "DOWN";
+                new_movement = "DOWN";
             }
             if (pressedButton.Key.Equals(ConsoleKey.LeftArrow) && movement != "RIGHT")
             {
-                return "LEFT";
+                new_movement = "LEFT";
             }
             if (pressedButton.Key.Equals(ConsoleKey.RightArrow) && movement != "LEFT")
             {
-                return "RIGHT";
+                new_movement = "RIGHT";
             }
-            return movement;
+            return new_movement;
         }
     }
 }
