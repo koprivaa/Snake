@@ -48,14 +48,11 @@ namespace Snake
                 {
                     break;
                 }
-                Console.SetCursorPosition(head.xpos, head.ypos);
-                Console.ForegroundColor = head.color;
-                Console.Write("■");
-                Console.SetCursorPosition(xposBerry, yposBerry);
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write("■");
-                dateBeforePress = DateTime.Now;
-                buttonWasPressed = "no";
+                //Rozdělení na update pozice hlavy a borůvky -Kopřiva
+                UpdateHeadPosition();
+                UpdateBerryPosition();
+                ResetButtonState();
+
                 while (true)
                 {
                     if (!has500msPassed(dateBeforePress)) { break; } //Přesunut výpočet, že 500 milisekund uběhlo do vlastní metody. -Turecký
@@ -146,6 +143,26 @@ namespace Snake
             bool IsCollisionWithBody(int x, int y)
             {
                 return x == head.xpos && y == head.ypos;
+            }
+
+            void UpdateHeadPosition()
+            {
+                Console.SetCursorPosition(head.xpos, head.ypos);
+                Console.ForegroundColor = head.color;
+                Console.Write("■");
+            }
+
+            void UpdateBerryPosition()
+            {
+                Console.SetCursorPosition(xposBerry, yposBerry);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write("■");
+            }
+
+            void ResetButtonState()
+            {
+                dateBeforePress = DateTime.Now;
+                buttonWasPressed = "no";
             }
 
 
