@@ -187,6 +187,8 @@ namespace Snake
                     break;
             }
         }
+
+
         static bool has500msPassed(DateTime dateBeforePress)
         {
             DateTime dateDuringPress = DateTime.Now;
