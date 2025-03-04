@@ -118,21 +118,7 @@ namespace Snake
                 }
                 xposBody.Add(head.xpos);
                 yposBody.Add(head.ypos);
-                switch (movement)
-                {
-                    case "UP":
-                        head.ypos--;
-                        break;
-                    case "DOWN":
-                        head.ypos++;
-                        break;
-                    case "LEFT":
-                        head.xpos--;
-                        break;
-                    case "RIGHT":
-                        head.xpos++;
-                        break;
-                }
+                DetermineMovementDirection(movement, head); //Switch statement přesunutý do vlastní metody -Turecký
                 if (xposBody.Count() > score)
                 {
                     xposBody.RemoveAt(0);
@@ -148,6 +134,25 @@ namespace Snake
             public int xpos { get; set; }
             public int ypos { get; set; }
             public ConsoleColor color { get; set; }
+        }
+
+        static void DetermineMovementDirection(string movement, Pixel head)
+        {
+            switch (movement)
+            {
+                case "UP":
+                    head.ypos--;
+                    break;
+                case "DOWN":
+                    head.ypos++;
+                    break;
+                case "LEFT":
+                    head.xpos--;
+                    break;
+                case "RIGHT":
+                    head.xpos++;
+                    break;
+            }
         }
     }
 }
