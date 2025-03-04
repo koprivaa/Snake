@@ -38,23 +38,12 @@ namespace Snake
                 CheckCollision();
                 DrawBorders();
 
-
                 Console.ForegroundColor = ConsoleColor.Green;
-                if (xposBerry == head.xpos && yposBerry == head.ypos)
-                {
-                    score++;
-                    xposBerry = randomNumber.Next(1, screenWidth - 2);
-                    yposBerry = randomNumber.Next(1, screenHeight - 2);
-                }
-                for (int i = 0; i < xposBody.Count(); i++)
-                {
-                    Console.SetCursorPosition(xposBody[i], yposBody[i]);
-                    Console.Write("■");
-                    if (xposBody[i] == head.xpos && yposBody[i] == head.ypos)
-                    {
-                        isGameover = 1;
-                    }
-                }
+                //Přidání kolizí borůvkám a tělu hada -Kopřiva
+                CheckBerryCollision();
+                CheckBodyCollision();
+
+
                 if (isGameover == 1)
                 {
                     break;
@@ -118,6 +107,51 @@ namespace Snake
                 Console.SetCursorPosition(x, y);
                 Console.Write("■");
             }
+
+            void CheckBerryCollision()
+            {
+                if (xposBerry == head.xpos && yposBerry == head.ypos)
+                {
+                    IncreaseScore();
+                    RespawnBerry();
+                }
+            }
+            void IncreaseScore()
+            {
+                score++;
+            }
+
+            void RespawnBerry()
+            {
+                xposBerry = randomNumber.Next(1, screenWidth - 2);
+                yposBerry = randomNumber.Next(1, screenHeight - 2);
+            }
+            void CheckBodyCollision()
+            {
+                for (int i = 0; i < xposBody.Count(); i++)
+                {
+                    DrawBodySegment(xposBody[i], yposBody[i]);
+
+                    if (IsCollisionWithBody(xposBody[i], yposBody[i]))
+                    {
+                        isGameover = 1;
+                    }
+                }
+            }
+
+            void DrawBodySegment(int x, int y)
+            {
+                Console.SetCursorPosition(x, y);
+                Console.Write("■");
+            }
+
+            bool IsCollisionWithBody(int x, int y)
+            {
+                return x == head.xpos && y == head.ypos;
+            }
+
+
+
             Console.SetCursorPosition(screenWidth / 5, screenHeight / 2);
             Console.WriteLine("Game over, Score: " + score);
             Console.SetCursorPosition(screenWidth / 5, screenHeight / 2 + 1);
