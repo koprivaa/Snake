@@ -15,8 +15,9 @@ namespace Snake
         {
             Console.WindowHeight = 16;
             Console.WindowWidth = 32;
-            GameWindow gameWindow = new GameWindow(Console.WindowWidth, Console.WindowHeight); //Přidaná třída GameWindow, jejichž objekt drží informace o výšce a šířce -Turecký
+            GameWindowParameters gameWindow = new GameWindowParameters(Console.WindowWidth, Console.WindowHeight); //Přidaná třída GameWindow, jejichž objekt drží informace o výšce a šířce -Turecký
             Random randomNumber = new Random();
+            
             int score = 5;
             int isGameover = 0;
             Pixel head = new Pixel();
@@ -31,6 +32,7 @@ namespace Snake
             berry.ypos = randomNumber.Next(0, gameWindow.windowHeight);
             berry.color = ConsoleColor.Cyan;
             DateTime dateBeforePress = DateTime.Now;
+            Renderer renderer = new Renderer(berry, head);
             //DateTime dateDuringPress = DateTime.Now;
             string buttonWasPressed = "no";
             while (true)
@@ -70,6 +72,7 @@ namespace Snake
                 {
                     RemoveOldBodyParts([xposBody, yposBody]); //Přesunuté do vlastní metody -Turecký
                 }
+                renderer.RenderGraphics();
             }
 
             
@@ -153,19 +156,49 @@ namespace Snake
             public int xpos { get; set; }
             public int ypos { get; set; }
             public ConsoleColor color { get; set; }
+
+            public void Draw() //Přidaná Draw() metoda, aby každý pixel šel jednoduše vykreslit -Turecký
+            {
+                Console.ForegroundColor = color;
+                Console.SetCursorPosition(xpos, ypos);
+                Console.Write("■");
+            }
         }
 
-        class GameWindow
+        class GameWindowParameters
         {
             public int windowWidth { get; }
             public int windowHeight { get; }
 
-            public GameWindow(int windowWidth, int windowHeight)
+            public GameWindowParameters(int windowWidth, int windowHeight)
             {
                 this.windowWidth = windowWidth;
                 this.windowHeight = windowHeight;
             }
 
+        }
+
+        class Renderer
+        {
+            private Pixel berry;
+            private Pixel head;
+
+            public Renderer(Pixel berry, Pixel head) {
+                this.berry = berry;
+                this.head = head;
+            }
+
+            public void UpdatePositions(Pixel berry, Pixel head)
+            {
+                this.berry = berry;
+                this.head = head;
+            }
+
+            public void RenderGraphics()
+            {
+                berry.Draw();
+                head.Draw();
+            }
         }
 
         static void DetermineMovementDirection(string movement, Pixel head)
@@ -227,7 +260,7 @@ namespace Snake
             body[0].RemoveAt(0);
             body[1].RemoveAt(0);
         }
-        static void DrawBorders(GameWindow gameWindow)
+        static void DrawBorders(GameWindowParameters gameWindow)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
 
@@ -249,7 +282,7 @@ namespace Snake
             Console.Write("■");
         }
 
-        static int CheckCollision(Pixel head, GameWindow gameWindow)
+        static int CheckCollision(Pixel head, GameWindowParameters gameWindow)
         {
             bool hitWall = head.xpos == gameWindow.windowWidth - 1 || head.xpos == 0 ||
                            head.ypos == gameWindow.windowHeight - 1 || head.ypos == 0;
