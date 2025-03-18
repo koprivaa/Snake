@@ -11,6 +11,13 @@ namespace Snake
 {
     class Program
     {
+        enum Direction
+        {
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        }
         static void Main(string[] args)
         {
             Console.WindowHeight = 16;
@@ -24,7 +31,7 @@ namespace Snake
             head.xpos = gameWindow.windowWidth / 2;
             head.ypos = gameWindow.windowHeight / 2;
             head.color = ConsoleColor.Red;
-            string movement = "RIGHT";
+            Direction movement = Direction.RIGHT;
             List<int> xposBody = new List<int>();
             List<int> yposBody = new List<int>();
             Pixel berry = new Pixel(); //Berry předělané z jednotlivých int proměnných na instanci třídy Pixel, stejně jako head. -Turecký
@@ -178,6 +185,7 @@ namespace Snake
 
         }
 
+
         class Renderer
         {
             private Pixel berry;
@@ -201,25 +209,27 @@ namespace Snake
             }
         }
 
-        static void DetermineMovementDirection(string movement, Pixel head)
+      
+
+        static void DetermineMovementDirection(Direction movement, Pixel head)
+
         {
             switch (movement)
             {
-                case "UP":
+                case Direction.UP:
                     head.ypos--;
                     break;
-                case "DOWN":
+                case Direction.DOWN:
                     head.ypos++;
                     break;
-                case "LEFT":
+                case Direction.LEFT:
                     head.xpos--;
                     break;
-                case "RIGHT":
+                case Direction.RIGHT:
                     head.xpos++;
                     break;
             }
         }
-
 
         static bool has500msPassed(DateTime dateBeforePress)
         {
@@ -227,29 +237,26 @@ namespace Snake
             if (dateDuringPress.Subtract(dateBeforePress).TotalMilliseconds > 500) { return false; }
             return true;
         }
-        static string DeterminePressedButton(string movement)
+        static Direction DeterminePressedButton(Direction currentDirection)
         {
-            ConsoleKeyInfo pressedButton = Console.ReadKey(true);
-            string new_movement = movement;
-            if (pressedButton.Key.Equals(ConsoleKey.UpArrow) && movement != "DOWN")
-            {
-                new_movement = "UP";
-            }
-            if (pressedButton.Key.Equals(ConsoleKey.DownArrow) && movement != "UP")
-            {
-                new_movement = "DOWN";
-            }
-            if (pressedButton.Key.Equals(ConsoleKey.LeftArrow) && movement != "RIGHT")
-            {
-                new_movement = "LEFT";
-            }
-            if (pressedButton.Key.Equals(ConsoleKey.RightArrow) && movement != "LEFT")
-            {
-                new_movement = "RIGHT";
-            }
-            return new_movement;
-        }
+            if (!Console.KeyAvailable)
+                return currentDirection;
 
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            switch (keyInfo.Key)
+            {
+                case ConsoleKey.W:
+                    return Direction.UP;
+                case ConsoleKey.S:
+                    return Direction.DOWN;
+                case ConsoleKey.A:
+                    return Direction.LEFT;
+                case ConsoleKey.D:
+                    return Direction.RIGHT;
+                default:
+                    return currentDirection; // Pokud byla stisknuta neplatná klávesa, směr se nezmění
+            }
+        }
         static void AddNewBodyParts(Pixel head, List<List<int>> body)
         {
             body[0].Add(head.xpos);
