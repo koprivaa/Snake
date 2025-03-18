@@ -20,9 +20,8 @@ namespace Snake
         }
         static void Main(string[] args)
         {
-            Console.WindowHeight = 16;
-            Console.WindowWidth = 32;
-            GameWindowParameters gameWindow = new GameWindowParameters(Console.WindowWidth, Console.WindowHeight); //Přidaná třída GameWindow, jejichž objekt drží informace o výšce a šířce -Turecký
+            GameWindow gameWindow = new GameWindow(32, 16); //Přidaná třída GameWindow, jejichž objekt drží informace o výšce a šířce -Turecký
+            gameWindow.UpdateWindowSize(); //Nyní mění velikost okna třída -Turecký
             Random randomNumber = new Random();
             
             int score = 5;
@@ -174,15 +173,21 @@ namespace Snake
             }
         }
 
-        class GameWindowParameters
+        class GameWindow
         {
             public int windowWidth { get; }
             public int windowHeight { get; }
 
-            public GameWindowParameters(int windowWidth, int windowHeight)
+            public GameWindow(int windowWidth, int windowHeight)
             {
                 this.windowWidth = windowWidth;
                 this.windowHeight = windowHeight;
+            }
+
+            public void UpdateWindowSize()
+            {
+                Console.WindowHeight = windowHeight;
+                Console.WindowWidth = windowWidth;
             }
 
         }
@@ -269,7 +274,7 @@ namespace Snake
             body[0].RemoveAt(0);
             body[1].RemoveAt(0);
         }
-        static void DrawBorders(GameWindowParameters gameWindow)
+        static void DrawBorders(GameWindow gameWindow)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
 
@@ -291,7 +296,7 @@ namespace Snake
             Console.Write("■");
         }
 
-        static int CheckCollision(Pixel head, GameWindowParameters gameWindow)
+        static int CheckCollision(Pixel head, GameWindow gameWindow)
         {
             bool hitWall = head.xpos == gameWindow.windowWidth - 1 || head.xpos == 0 ||
                            head.ypos == gameWindow.windowHeight - 1 || head.ypos == 0;
