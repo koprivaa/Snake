@@ -15,21 +15,20 @@ namespace Snake
         {
             Console.WindowHeight = 16;
             Console.WindowWidth = 32;
-            int screenWidth = Console.WindowWidth;
-            int screenHeight = Console.WindowHeight;
+            GameWindow gameWindow = new GameWindow(Console.WindowWidth, Console.WindowHeight); //Přidaná třída GameWindow, jejichž objekt drží informace o výšce a šířce -Turecký
             Random randomNumber = new Random();
             int score = 5;
             int isGameover = 0;
             Pixel head = new Pixel();
-            head.xpos = screenWidth / 2;
-            head.ypos = screenHeight / 2;
+            head.xpos = gameWindow.windowWidth / 2;
+            head.ypos = gameWindow.windowHeight / 2;
             head.color = ConsoleColor.Red;
             string movement = "RIGHT";
             List<int> xposBody = new List<int>();
             List<int> yposBody = new List<int>();
             Pixel berry = new Pixel(); //Berry předělané z jednotlivých int proměnných na instanci třídy Pixel, stejně jako head. -Turecký
-            berry.xpos = randomNumber.Next(0, screenWidth);
-            berry.ypos = randomNumber.Next(0, screenHeight);
+            berry.xpos = randomNumber.Next(0, gameWindow.windowWidth);
+            berry.ypos = randomNumber.Next(0, gameWindow.windowHeight);
             berry.color = ConsoleColor.Cyan;
             DateTime dateBeforePress = DateTime.Now;
             //DateTime dateDuringPress = DateTime.Now;
@@ -38,8 +37,8 @@ namespace Snake
             {
                 Console.Clear();
                 //Rozdělení na metody vykreslení hranic a kolizí -Kopřiva
-                isGameover = CheckCollision(head, screenWidth, screenHeight); //Metoda přesunutá mimo Main a upravená
-                DrawBorders(screenWidth, screenHeight); //Metoda přesunutá mimo Main a upravená
+                isGameover = CheckCollision(head, gameWindow); //Metoda přesunutá mimo Main a upravená
+                DrawBorders(gameWindow); //Metoda přesunutá mimo Main a upravená
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 //Přidání kolizí borůvkám a tělu hada -Kopřiva
@@ -94,8 +93,8 @@ namespace Snake
 
             void RespawnBerry()
             {
-                berry.xpos = randomNumber.Next(1, screenWidth - 2);
-                berry.ypos = randomNumber.Next(1, screenHeight - 2);
+                berry.xpos = randomNumber.Next(1, gameWindow.windowWidth - 2);
+                berry.ypos = randomNumber.Next(1, gameWindow.windowHeight - 2);
             }
             void CheckBodyCollision()
             {
@@ -143,9 +142,9 @@ namespace Snake
 
 
 
-            Console.SetCursorPosition(screenWidth / 5, screenHeight / 2);
+            Console.SetCursorPosition(gameWindow.windowWidth / 5, gameWindow.windowHeight / 2);
             Console.WriteLine("Game over, Score: " + score);
-            Console.SetCursorPosition(screenWidth / 5, screenHeight / 2 + 1);
+            Console.SetCursorPosition(gameWindow.windowWidth / 5, gameWindow.windowHeight / 2 + 1);
         }
 
 
@@ -154,6 +153,19 @@ namespace Snake
             public int xpos { get; set; }
             public int ypos { get; set; }
             public ConsoleColor color { get; set; }
+        }
+
+        class GameWindow
+        {
+            public int windowWidth { get; }
+            public int windowHeight { get; }
+
+            public GameWindow(int windowWidth, int windowHeight)
+            {
+                this.windowWidth = windowWidth;
+                this.windowHeight = windowHeight;
+            }
+
         }
 
         static void DetermineMovementDirection(string movement, Pixel head)
@@ -215,20 +227,20 @@ namespace Snake
             body[0].RemoveAt(0);
             body[1].RemoveAt(0);
         }
-        static void DrawBorders(int screenWidth, int screenHeight)
+        static void DrawBorders(GameWindow gameWindow)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            for (int x = 0; x < screenWidth; x++)
+            for (int x = 0; x < gameWindow.windowWidth; x++)
             {
                 DrawBorderTile(x, 0);
-                DrawBorderTile(x, screenHeight - 1);
+                DrawBorderTile(x, gameWindow.windowHeight - 1);
             }
 
-            for (int y = 0; y < screenHeight; y++)
+            for (int y = 0; y < gameWindow.windowHeight; y++)
             {
                 DrawBorderTile(0, y);
-                DrawBorderTile(screenWidth - 1, y);
+                DrawBorderTile(gameWindow.windowWidth - 1, y);
             }
         }
         static void DrawBorderTile(int x, int y)
@@ -237,10 +249,10 @@ namespace Snake
             Console.Write("■");
         }
 
-        static int CheckCollision(Pixel head, int screenWidth, int screenHeight)
+        static int CheckCollision(Pixel head, GameWindow gameWindow)
         {
-            bool hitWall = head.xpos == screenWidth - 1 || head.xpos == 0 ||
-                           head.ypos == screenHeight - 1 || head.ypos == 0;
+            bool hitWall = head.xpos == gameWindow.windowWidth - 1 || head.xpos == 0 ||
+                           head.ypos == gameWindow.windowHeight - 1 || head.ypos == 0;
             if (hitWall)
             {
                 return 1;
