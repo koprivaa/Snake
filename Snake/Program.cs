@@ -54,14 +54,16 @@ namespace Snake
                 CheckBerryCollision();
                 CheckBodyCollision();
 
-
+                
                 if (isGameover == 1)
                 {
                     break;
                 }
                 //Rozdělení na update pozice hlavy a borůvky -Kopřiva
-                UpdateHeadPosition();
-                UpdateBerryPosition();
+                //UpdateHeadPosition();
+                //UpdateBerryPosition();
+                renderer.RenderGraphics();
+
                 ResetButtonState();
 
                 while (true)
@@ -79,7 +81,7 @@ namespace Snake
                 {
                     RemoveOldBodyParts([xposBody, yposBody]); //Přesunuté do vlastní metody -Turecký
                 }
-                renderer.RenderGraphics();
+                
             }
 
             
@@ -166,8 +168,8 @@ namespace Snake
 
             public void Draw() //Přidaná Draw() metoda, aby každý pixel šel jednoduše vykreslit -Turecký
             {
-                Console.ForegroundColor = color;
                 Console.SetCursorPosition(xpos, ypos);
+                Console.ForegroundColor = color;
                 Console.Write("■");
             }
         }
