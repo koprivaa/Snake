@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Numerics;
 ///█ ■
 ////https://www.youtube.com/watch?v=SGZgvMwjq2U
 namespace Snake
@@ -37,8 +38,8 @@ namespace Snake
             {
                 Console.Clear();
                 //Rozdělení na metody vykreslení hranic a kolizí -Kopřiva
-                CheckCollision();
-                DrawBorders();
+                isGameover = CheckCollision(head, screenWidth, screenHeight); //Metoda přesunutá mimo Main a upravená
+                DrawBorders(screenWidth, screenHeight); //Metoda přesunutá mimo Main a upravená
 
                 Console.ForegroundColor = ConsoleColor.Green;
                 //Přidání kolizí borůvkám a tělu hada -Kopřiva
@@ -72,38 +73,11 @@ namespace Snake
                 }
             }
 
-            void CheckCollision()
-            {
-                bool hitWall = head.xpos == screenWidth - 1 || head.xpos == 0 ||
-                               head.ypos == screenHeight - 1 || head.ypos == 0;
-                if (hitWall)
-                {
-                    isGameover = 1;
-                }
-            }
+            
 
-            void DrawBorders()
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan ;
+            
 
-                for (int x = 0; x < screenWidth; x++)
-                {
-                    DrawBorderTile(x, 0);
-                    DrawBorderTile(x, screenHeight - 1);
-                }
-
-                for (int y = 0; y < screenHeight; y++)
-                {
-                    DrawBorderTile(0, y);
-                    DrawBorderTile(screenWidth - 1, y);
-                }
-            }
-
-            void DrawBorderTile(int x, int y)
-            {
-                Console.SetCursorPosition(x, y);
-                Console.Write("■");
-            }
+            
 
             void CheckBerryCollision()
             {
@@ -240,6 +214,41 @@ namespace Snake
         {
             body[0].RemoveAt(0);
             body[1].RemoveAt(0);
+        }
+        static void DrawBorders(int screenWidth, int screenHeight)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+
+            for (int x = 0; x < screenWidth; x++)
+            {
+                DrawBorderTile(x, 0);
+                DrawBorderTile(x, screenHeight - 1);
+            }
+
+            for (int y = 0; y < screenHeight; y++)
+            {
+                DrawBorderTile(0, y);
+                DrawBorderTile(screenWidth - 1, y);
+            }
+        }
+        static void DrawBorderTile(int x, int y)
+        {
+            Console.SetCursorPosition(x, y);
+            Console.Write("■");
+        }
+
+        static int CheckCollision(Pixel head, int screenWidth, int screenHeight)
+        {
+            bool hitWall = head.xpos == screenWidth - 1 || head.xpos == 0 ||
+                           head.ypos == screenHeight - 1 || head.ypos == 0;
+            if (hitWall)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 }
